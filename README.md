@@ -6,39 +6,45 @@ O Figma foi utilizado para a abstração do domínio desta API, sendo útil na a
 ## Diagrama de Classes (Domínio da API)
 ```mermaid
 classDiagram
-  class User {
-    -String name
-    -Account account
-    -Feature[] features
-    -Card card
-    -News[] news
-  }
+      class Aluno {
+        +Long id
+        +String nome
+        +String matricula
+        +LocalDate dataNascimento
+        +String email
+        +List~Turma~ turmas
+        +List~Nota~ notas
+    }
 
-  class Account {
-    -String number
-    -String agency
-    -Number balance
-    -Number limit
-  }
+    class Professor {
+        +Long id
+        +String nome
+        +String email
+        +String disciplina
+        +List~Turma~ turmasLecionadas
+    }
 
-  class Feature {
-    -String icon
-    -String description
-  }
+    class Turma {
+        +Long id
+        +String codigo
+        +String nome
+        +String periodo
+        +Professor professor
+        +List~Aluno~ alunos
+        +List~Nota~ notas
+    }
 
-  class Card {
-    -String number
-    -Number limit
-  }
+    class Nota {
+        +Long id
+        +Aluno aluno
+        +Turma turma
+        +BigDecimal valor
+        +String tipo
+    }
 
-  class News {
-    -String icon
-    -String description
-  }
-
-  User "1" *-- "1" Account
-  User "1" *-- "N" Feature
-  User "1" *-- "1" Card
-  User "1" *-- "N" News
+    Aluno "0..*" -- "0..*" Turma : frequenta
+    Professor "1" -- "0..*" Turma : leciona
+    Turma "1" -- "0..*" Nota : possui
+    Aluno "1" -- "0..*" Nota : tem
 ```
 
