@@ -42,9 +42,9 @@ classDiagram
         +List~Nota~ notas
     }
 
-    Aluno "0..*" -- "0..*" Turma : frequenta
-    Professor "1" -- "0..*" Turma : leciona
-    Turma "1" -- "0..*" Nota : possui
-    Aluno "1" -- "0..*" Nota : tem
+      Turma "1" *-- "1" Professor
+      Turma "1" *-- "N" Aluno
+      Turma "1" *-- "N" Nota
+
 ```
 
