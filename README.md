@@ -24,6 +24,14 @@ classDiagram
         +List~Turma~ turmasLecionadas
     }
 
+   class Nota {
+        +Long id
+        +Aluno aluno
+        +Turma turma
+        +BigDecimal valor
+        +String tipo
+    }
+
     class Turma {
         +Long id
         +String codigo
@@ -32,14 +40,6 @@ classDiagram
         +Professor professor
         +List~Aluno~ alunos
         +List~Nota~ notas
-    }
-
-    class Nota {
-        +Long id
-        +Aluno aluno
-        +Turma turma
-        +BigDecimal valor
-        +String tipo
     }
 
     Aluno "0..*" -- "0..*" Turma : frequenta
