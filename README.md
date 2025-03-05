@@ -45,6 +45,7 @@ classDiagram
       Turma "1" *-- "1" Professor
       Turma "1" *-- "N" Aluno
       Turma "1" *-- "N" Nota
+      Aluno "1" -- "N" Nota
 
 ```
 
