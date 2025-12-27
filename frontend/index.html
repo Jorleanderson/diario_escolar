@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Professores</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h1>Cadastro de Professores</h1>
+
+<button onclick="listarProfessores()">Listar Professores</button>
+
+<ul id="lista-professores"></ul>
+
+<h2>Novo Professor</h2>
+
+<form id="form-professor" onsubmit="salvarProfessor(event)">
+
+    <input type="text" id="nome" placeholder="Nome do professor" required>
+    <br><br>
+
+    <input type="email" id="email" placeholder="E-mail do professor" required>
+    <br><br>
+
+    <input type="text" id="disciplina" placeholder="Disciplina" required>
+    <br><br>
+
+    <input type="text" id="formacao" placeholder="Formação" required>
+    <br><br>
+
+    <button type="submit">Salvar</button>
+</form>
+
+<hr>
+
+
+<script src="js/professor.js"></script>
+</body>
+</html>
