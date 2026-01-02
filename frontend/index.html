@@ -9,7 +9,15 @@
 
 <h1>Cadastro de Professores</h1>
 
-<button onclick="listarProfessores()">Listar Professores</button>
+<button onclick="listarProfessoresPaginado()">Listar Professores</button>
+<div style="margin-top: 20px;">
+    <button onclick="paginaAnterior()">Anterior</button>
+
+    <span id="info-pagina">Página 1</span>
+
+    <button onclick="proximaPagina()">Próxima</button>
+</div>
+<hr>
 
 <ul id="lista-professores"></ul>
 

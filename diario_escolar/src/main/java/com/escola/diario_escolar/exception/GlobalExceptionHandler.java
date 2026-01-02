@@ -8,17 +8,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(ProfessorNotFoundException.class)
-    public ResponseEntity<String> handleProfessorNotFound(
-            ProfessorNotFoundException ex) {
+    @ExceptionHandler((ApiException.class))
+    public ResponseEntity<ApiErrorResponse> handleNotFound(
+        ApiException ex) {
 
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(ex.getMessage());
+            ApiErrorResponse response = new ApiErrorResponse();
+            response.setStatus(ex.getStatus().value());
+            response.setError(ex.getMessage());
+
+           return ResponseEntity
+            .status(ex.getStatus())
+            .body(response);
     }
  
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -42,6 +47,19 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(response);
     }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+public ResponseEntity<ApiErrorResponse> handleTypeMismatch(
+        MethodArgumentTypeMismatchException ex) {
+
+    ApiErrorResponse response = new ApiErrorResponse();
+    response.setStatus(HttpStatus.BAD_REQUEST.value());
+    response.setError("Parâmetro inválido: " + ex.getName());
+
+    return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(response);
+}
 
  
 }

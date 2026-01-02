@@ -1,58 +1,104 @@
 package com.escola.diario_escolar.controller;
 
+import java.net.URI;
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.web.PageableDefault;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.escola.diario_escolar.dto.AlunoDto;
-import com.escola.diario_escolar.model.AlunoEntity;
+import com.escola.diario_escolar.dto.AlunoPatchDTO;
 import com.escola.diario_escolar.service.AlunoService;
 
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestParam;
+
+
 @RestController
-@RequestMapping("/alunos")
+@RequestMapping("/api/alunos")
 public class AlunoController {
-	
+
 	private final AlunoService alunoService;
 
 	public AlunoController(AlunoService service) {
-		this.alunoService  = service;
+		this.alunoService = service;
 	}
-	
+
 	@PostMapping
-	public AlunoDto adicionarAluno(@RequestBody AlunoDto alunoDto) {
-		
-		return alunoService.criarAluno(alunoDto);
+	public ResponseEntity<AlunoDto> postAluno(
+			@RequestBody @Valid AlunoDto alunoDto) {
+
+		AlunoDto aluno = alunoService.criarAluno(alunoDto);
+
+		URI location = ServletUriComponentsBuilder
+				.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(aluno.getId())
+				.toUri();
+
+		return ResponseEntity.created(location).body(aluno);
 	}
-	
+
+	@GetMapping("/paginado")
+	public ResponseEntity<Page<AlunoDto>> listarPaginado(
+			@PageableDefault(size = 10, sort = "nome") Pageable pageable) {
+
+		Page<AlunoDto> alunos = alunoService.listarPaginado(pageable);
+
+		return ResponseEntity.ok(alunos);
+	}
+
 	@GetMapping
-	public List<AlunoEntity> listarTodos() {
-		
-		return alunoService.listarTodos();
-		
+	public ResponseEntity<List<AlunoDto>> listarTodos() {
+		List<AlunoDto> listaAlunos = alunoService.listarTodos();
+
+		return ResponseEntity.ok(listaAlunos);
 	}
-	
-	@GetMapping("/{id}")
-	public AlunoDto buscarPorId(@PathVariable("id") Long id) {
-		
-		return alunoService.buscarPorId(id);
-	}
-	
+
 	@PutMapping("/{id}")
-	public AlunoDto atualizar(@RequestBody AlunoDto aluno,
+	public ResponseEntity<AlunoDto> atualizar(
+			@RequestBody @Valid AlunoDto alunoDto,
 			@PathVariable("id") Long id) {
-		
-		return alunoService.atualizar(id,aluno);
+
+		AlunoDto alunoAtualizado = alunoService.atualizar(id, alunoDto);
+
+		return ResponseEntity.ok(alunoAtualizado);
 	}
-	
+
+	@GetMapping("/{id}")
+	public ResponseEntity<AlunoDto> buscarPorId(@PathVariable("id") Long id) {
+
+		AlunoDto aluno = alunoService.buscarPorId(id);
+
+		return ResponseEntity.ok(aluno);
+	}
+
 	@DeleteMapping("/{id}")
-	public void deletarAluno(@PathVariable("id") Long id) {
+	public void deletar(@PathVariable("id") Long id) {
 		alunoService.deletar(id);
+	}
+
+	@PatchMapping("/{id}")
+	public ResponseEntity<AlunoDto> atualizarParcial(
+			@PathVariable("id") Long id,
+			@RequestBody AlunoPatchDTO patchDto) {
+
+		AlunoDto alunoAtualizado = alunoService.atualizarParcial(id, patchDto);
+
+		return ResponseEntity.ok(alunoAtualizado);
 	}
 }

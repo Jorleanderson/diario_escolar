@@ -7,6 +7,8 @@ public class AlunoMapper {
 
     public static AlunoDto toDto(AlunoEntity aluno) {
         AlunoDto dto = new AlunoDto();
+
+        dto.setId(aluno.getId());
         dto.setNome(aluno.getNome());
         dto.setMatricula(aluno.getMatricula());
         dto.setDataNascimento(aluno.getDataNascimento());

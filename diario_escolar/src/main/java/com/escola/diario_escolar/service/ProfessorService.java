@@ -5,11 +5,12 @@ import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.escola.diario_escolar.dto.ProfessorDTO;
 import com.escola.diario_escolar.dto.ProfessorPatchDTO;
-import com.escola.diario_escolar.exception.ProfessorNotFoundException;
+import com.escola.diario_escolar.exception.ApiException;
 import com.escola.diario_escolar.mapper.ProfessorMapper;
 import com.escola.diario_escolar.model.Professor;
 import com.escola.diario_escolar.repository.ProfessorRepository;
@@ -24,6 +25,13 @@ public class ProfessorService {
     }
     
     public ProfessorDTO criarProfessor(ProfessorDTO dto) {
+
+        if (repository.existsByEmail(dto.getEmail())) {
+            throw new ApiException(
+                 "Já existe um professor cadastrado com este e-mail",
+                HttpStatus.CONFLICT
+            );
+        }
         Professor professor = ProfessorMapper.toEntity(dto);
         Professor salvo = repository.save(professor);
         return ProfessorMapper.toDTO(salvo);
@@ -38,7 +46,7 @@ public class ProfessorService {
 
     private Professor findEntityById(UUID id) {
         return repository.findById(id)
-        		.orElseThrow(ProfessorNotFoundException::new);
+        		.orElseThrow(() -> new ApiException("Professor não encontrado.", HttpStatus.NOT_FOUND));
     }
 
     public ProfessorDTO buscarPorId(UUID id) {

@@ -1,7 +1,10 @@
 const API_URL = "http://localhost:8080/api/professores";
+let paginaAtual = 0;
+let totalPaginas = 0;
+const tamanhoPagina = 5;
 
-function listarProfessores() {
-    fetch(API_URL)
+function listarProfessoresPaginado(page = 0) {
+    fetch(`${API_URL}/paginado?page=${page}&size=${tamanhoPagina}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error("Erro ao buscar professores");
@@ -9,14 +12,45 @@ function listarProfessores() {
             return response.json();
         })
         .then(data => {
-            console.log(data);
-            mostrarProfessores(data);
+            mostrarProfessores(data.content);
+            console.log("DATA DA API:", data);
+
+            paginaAtual = data.number;
+            totalPaginas = data.totalPages;
+
+            atualizarControles();
         })
         .catch(error => {
             console.error(error);
             alert("Erro ao carregar professores");
         });
 }
+
+function atualizarControles() {
+    const info = document.getElementById("info-pagina");
+
+    if (!info) return;
+
+    info.textContent = `Página ${paginaAtual + 1} de ${totalPaginas}`;
+}
+
+function proximaPagina() {
+    console.log("Clique em Próxima");
+
+    if (paginaAtual < totalPaginas - 1) {
+        listarProfessoresPaginado(paginaAtual + 1);
+    }
+}
+
+function paginaAnterior() {
+    console.log("Clique em Anterior");
+
+    if (paginaAtual > 0) {
+        listarProfessoresPaginado(paginaAtual - 1);
+    }
+}
+
+
 
 function mostrarProfessores(professores) {
     const lista = document.getElementById("lista-professores");
@@ -67,7 +101,7 @@ function salvarProfessor(event) {
     .then(data => {
         alert("Professor cadastrado com sucesso!");
         document.getElementById("form-professor").reset();
-        listarProfessores(); // atualiza lista
+        listarProfessoresPaginado(paginaAtual);
     })
     .catch(error => {
         console.error(error);
