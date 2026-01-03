@@ -2,7 +2,7 @@ package com.escola.diario_escolar.dto;
 
 import java.time.LocalDate;
 
-public class AlunoPatchDTO {
+public class AlunoPatchDto {
    
     private String nome;
     private String email;

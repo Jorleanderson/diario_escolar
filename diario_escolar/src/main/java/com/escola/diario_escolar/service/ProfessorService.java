@@ -8,23 +8,24 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.escola.diario_escolar.dto.ProfessorDTO;
-import com.escola.diario_escolar.dto.ProfessorPatchDTO;
+import com.escola.diario_escolar.dto.ProfessorDto;
+import com.escola.diario_escolar.dto.ProfessorPatchDto;
 import com.escola.diario_escolar.exception.ApiException;
 import com.escola.diario_escolar.mapper.ProfessorMapper;
 import com.escola.diario_escolar.model.Professor;
 import com.escola.diario_escolar.repository.ProfessorRepository;
 
 @Service
-public class ProfessorService {
+public class ProfessorService extends BaseService<Professor,UUID>{
 
     private final ProfessorRepository repository;
 
     public ProfessorService(ProfessorRepository repository) {
+        super(repository, "Professor");
         this.repository = repository;
     }
     
-    public ProfessorDTO criarProfessor(ProfessorDTO dto) {
+    public ProfessorDto criarProfessor(ProfessorDto dto) {
 
         if (repository.existsByEmail(dto.getEmail())) {
             throw new ApiException(
@@ -33,33 +34,28 @@ public class ProfessorService {
             );
         }
         Professor professor = ProfessorMapper.toEntity(dto);
-        Professor salvo = repository.save(professor);
-        return ProfessorMapper.toDTO(salvo);
+    
+        return ProfessorMapper.toDTO(repository.save(professor));
     }
     
-    public List<ProfessorDTO> listarTodos() {
+    public List<ProfessorDto> listarTodos() {
         return repository.findAll()
                 .stream()
                 .map(ProfessorMapper::toDTO)
                 .toList();
     }
 
-    private Professor findEntityById(UUID id) {
-        return repository.findById(id)
-        		.orElseThrow(() -> new ApiException("Professor não encontrado.", HttpStatus.NOT_FOUND));
-    }
-
-    public ProfessorDTO buscarPorId(UUID id) {
+    public ProfessorDto buscarPorId(UUID id) {
         return ProfessorMapper.toDTO(findEntityById(id));
     }
 
-    public ProfessorDTO atualizar(UUID id, ProfessorDTO novoProfessor) {
+    public ProfessorDto atualizar(UUID id, ProfessorDto atualizado) {
         Professor professor = findEntityById(id);
 
-        professor.setNome(novoProfessor.getNome());
-        professor.setEmail(novoProfessor.getEmail());
-        professor.setDisciplina(novoProfessor.getDisciplina());
-        professor.setFormacao(novoProfessor.getFormacao());
+        professor.setNome(atualizado.getNome());
+        professor.setEmail(atualizado.getEmail());
+        professor.setDisciplina(atualizado.getDisciplina());
+        professor.setFormacao(atualizado.getFormacao());
 
         return ProfessorMapper.toDTO(repository.save(professor));
     }
@@ -69,7 +65,7 @@ public class ProfessorService {
         repository.delete(professor);
     }
     
-    public ProfessorDTO atualizarParcial(UUID id, ProfessorPatchDTO patchDto) {
+    public ProfessorDto atualizarParcial(UUID id, ProfessorPatchDto patchDto) {
 
         Professor professor = findEntityById(id);
 
@@ -94,7 +90,7 @@ public class ProfessorService {
         return ProfessorMapper.toDTO(atualizado);
     }
     
-    public Page<ProfessorDTO> listarPaginado(Pageable pageable) {
+    public Page<ProfessorDto> listarPaginado(Pageable pageable) {
 
         return repository.findAll(pageable)
                 .map(ProfessorMapper::toDTO);

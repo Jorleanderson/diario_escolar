@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.escola.diario_escolar.dto.ProfessorDTO;
-import com.escola.diario_escolar.dto.ProfessorPatchDTO;
+import com.escola.diario_escolar.dto.ProfessorDto;
+import com.escola.diario_escolar.dto.ProfessorPatchDto;
 import com.escola.diario_escolar.service.ProfessorService;
 
 import jakarta.validation.Valid;
@@ -38,9 +38,9 @@ public class ProfessorController {
     }
 
     @PostMapping
-    public ResponseEntity<ProfessorDTO> postProfessor(
-            @RequestBody @Valid ProfessorDTO dto) {
-        ProfessorDTO professor = professorService.criarProfessor(dto);
+    public ResponseEntity<ProfessorDto> postProfessor(
+            @RequestBody @Valid ProfessorDto dto) {
+        ProfessorDto professor = professorService.criarProfessor(dto);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -52,37 +52,37 @@ public class ProfessorController {
     }
 
     @GetMapping("/paginado")
-    public ResponseEntity<Page<ProfessorDTO>> listarPaginado(
+    public ResponseEntity<Page<ProfessorDto>> listarPaginado(
             @PageableDefault(size = 10, sort = "nome") Pageable pageable) {
 
-        Page<ProfessorDTO> pagina = professorService.listarPaginado(pageable);
+        Page<ProfessorDto> pagina = professorService.listarPaginado(pageable);
 
         return ResponseEntity.ok(pagina);
 
     }
 
     @GetMapping
-    public ResponseEntity<List<ProfessorDTO>> listarTodos() {
-        List<ProfessorDTO> professores = professorService.listarTodos();
+    public ResponseEntity<List<ProfessorDto>> listarTodos() {
+        List<ProfessorDto> professores = professorService.listarTodos();
 
         return ResponseEntity.ok(professores);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProfessorDTO> buscarPorId(
+    public ResponseEntity<ProfessorDto> buscarPorId(
             @PathVariable("id") UUID id) {
 
-        ProfessorDTO professor = professorService.buscarPorId(id);
+        ProfessorDto professor = professorService.buscarPorId(id);
 
         return ResponseEntity.ok(professor);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProfessorDTO> atualizar(
+    public ResponseEntity<ProfessorDto> atualizar(
             @PathVariable("id") UUID id,
-            @RequestBody @Valid ProfessorDTO professorDto) {
+            @RequestBody @Valid ProfessorDto professorDto) {
 
-        ProfessorDTO professor = professorService.atualizar(id, professorDto);
+        ProfessorDto professor = professorService.atualizar(id, professorDto);
 
         return ResponseEntity.ok(professor);
     }
@@ -95,11 +95,11 @@ public class ProfessorController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ProfessorDTO> atualizarParcial(
+    public ResponseEntity<ProfessorDto> atualizarParcial(
             @PathVariable("id") UUID id,
-            @RequestBody ProfessorPatchDTO patchDto) {
+            @RequestBody ProfessorPatchDto patchDto) {
 
-        ProfessorDTO ProfessorAtualizado = professorService.atualizarParcial(id, patchDto);
+        ProfessorDto ProfessorAtualizado = professorService.atualizarParcial(id, patchDto);
 
         return ResponseEntity.ok(ProfessorAtualizado);
     }

@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.escola.diario_escolar.dto.AlunoDto;
-import com.escola.diario_escolar.dto.AlunoPatchDTO;
+import com.escola.diario_escolar.dto.AlunoPatchDto;
 import com.escola.diario_escolar.exception.ApiException;
 import com.escola.diario_escolar.mapper.AlunoMapper;
 import com.escola.diario_escolar.model.AlunoEntity;
@@ -84,7 +84,7 @@ public class AlunoService extends BaseService<AlunoEntity, Long>{
 		repository.deleteById(id);
 	}
 
-	public AlunoDto atualizarParcial(Long id, AlunoPatchDTO alunoPatch) {
+	public AlunoDto atualizarParcial(Long id, AlunoPatchDto alunoPatch) {
 
         AlunoEntity aluno = findEntityById(id);
 

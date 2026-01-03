@@ -1,6 +1,6 @@
 package com.escola.diario_escolar.dto;
 
-public class ProfessorPatchDTO {
+public class ProfessorPatchDto {
 	
 	  private String nome;
 	  private String email;

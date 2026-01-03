@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.web.PageableDefault;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,11 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.escola.diario_escolar.dto.AlunoDto;
-import com.escola.diario_escolar.dto.AlunoPatchDTO;
+import com.escola.diario_escolar.dto.AlunoPatchDto;
 import com.escola.diario_escolar.service.AlunoService;
 
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -88,14 +86,15 @@ public class AlunoController {
 	}
 
 	@DeleteMapping("/{id}")
-	public void deletar(@PathVariable("id") Long id) {
-		alunoService.deletar(id);
-	}
+    public ResponseEntity<Void> deletar(@PathVariable("id") Long id) {
+        alunoService.deletar(id);
+        return ResponseEntity.noContent().build();
+    }
 
 	@PatchMapping("/{id}")
 	public ResponseEntity<AlunoDto> atualizarParcial(
 			@PathVariable("id") Long id,
-			@RequestBody AlunoPatchDTO patchDto) {
+			@RequestBody AlunoPatchDto patchDto) {
 
 		AlunoDto alunoAtualizado = alunoService.atualizarParcial(id, patchDto);
 
