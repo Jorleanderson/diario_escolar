@@ -26,7 +26,7 @@ public class TurmaService extends BaseService<Turma, Long> {
 
         public TurmaDto criarTurma(TurmaDto turmaDto) {
 
-            if (repository.existsByEmail(turmaDto.getCodigo())) {
+            if (repository.existsByCodigo(turmaDto.getCodigo())) {
                 throw new ApiException(
                     "Já existe uma turma cadastrada com este código",
                     HttpStatus.CONFLICT
