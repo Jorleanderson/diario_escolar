@@ -19,8 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.escola.diario_escolar.dto.NotaDto;
-import com.escola.diario_escolar.dto.NotaPatchDto;
+import com.escola.diario_escolar.dto.nota.NotaDto;
+import com.escola.diario_escolar.dto.nota.NotaPatchDto;
+import com.escola.diario_escolar.dto.nota.NotaResponseDto;
 import com.escola.diario_escolar.service.NotaService;
 
 import jakarta.validation.Valid;
@@ -37,9 +38,9 @@ public class NotaController {
 	}
 
 	@PostMapping
-	public ResponseEntity<NotaDto> postNota(
+	public ResponseEntity<NotaResponseDto> postNota(
 			@RequestBody @Valid NotaDto nota) {
-		NotaDto notaCriada = notaService.criarNota(nota);
+		NotaResponseDto notaCriada = notaService.criarNota(nota);
 
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()

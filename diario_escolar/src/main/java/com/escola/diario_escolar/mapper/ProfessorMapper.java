@@ -1,6 +1,6 @@
 package com.escola.diario_escolar.mapper;
 
-import com.escola.diario_escolar.dto.ProfessorDto;
+import com.escola.diario_escolar.dto.professor.ProfessorDto;
 import com.escola.diario_escolar.model.Professor;
 
 public class ProfessorMapper {

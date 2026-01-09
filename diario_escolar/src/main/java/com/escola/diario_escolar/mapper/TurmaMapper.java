@@ -1,6 +1,6 @@
 package com.escola.diario_escolar.mapper;
 
-import com.escola.diario_escolar.dto.TurmaDto;
+import com.escola.diario_escolar.dto.turma.TurmaDto;
 import com.escola.diario_escolar.model.Turma;
 
 public class TurmaMapper {

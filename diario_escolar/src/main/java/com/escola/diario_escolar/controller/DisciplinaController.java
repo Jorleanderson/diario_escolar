@@ -19,8 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.escola.diario_escolar.dto.DisciplinaDto;
-import com.escola.diario_escolar.dto.DisciplinaPatchDto;
+import com.escola.diario_escolar.dto.disciplina.DisciplinaDto;
+import com.escola.diario_escolar.dto.disciplina.DisciplinaPatchDto;
+import com.escola.diario_escolar.dto.disciplina.DisciplinaResponseDto;
 import com.escola.diario_escolar.service.DisciplinaService;
 
 import jakarta.validation.Valid;
@@ -37,9 +38,9 @@ public class DisciplinaController {
     }
 
     @PostMapping
-    public ResponseEntity<DisciplinaDto> postDisciplina(
+    public ResponseEntity<DisciplinaResponseDto> postDisciplina(
             @RequestBody @Valid DisciplinaDto dto) {
-        DisciplinaDto criado = disciplinaService.criarDisciplina(dto);
+        DisciplinaResponseDto criado = disciplinaService.criarDisciplina(dto);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -61,28 +62,27 @@ public class DisciplinaController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DisciplinaDto>> listarTodos() {
-        List<DisciplinaDto> list = disciplinaService.listarTodos();
+    public ResponseEntity<List<DisciplinaResponseDto>> listarTodos() {
+        List<DisciplinaResponseDto> list = disciplinaService.listarTodos();
 
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DisciplinaDto> buscarPorId(
+    public ResponseEntity<DisciplinaResponseDto> buscarPorId(
             @PathVariable("id") Long id) {
 
-        DisciplinaDto dto = disciplinaService.buscarPorId(id);
+        DisciplinaResponseDto dto = disciplinaService.buscarPorId(id);
 
         return ResponseEntity.ok(dto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<DisciplinaDto> atualizar(
+    public ResponseEntity<DisciplinaResponseDto> atualizar(
             @PathVariable("id") Long id,
             @RequestBody @Valid DisciplinaDto disciplinaDto) {
 
-        DisciplinaDto atualizado = disciplinaService.atualizar(id, disciplinaDto);
-
+        DisciplinaResponseDto atualizado = disciplinaService.atualizar(id, disciplinaDto);
         return ResponseEntity.ok(atualizado);
     }
 

@@ -50,8 +50,6 @@ function paginaAnterior() {
     }
 }
 
-
-
 function mostrarProfessores(professores) {
     const lista = document.getElementById("lista-professores");
     lista.innerHTML = "";

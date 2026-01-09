@@ -19,8 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.escola.diario_escolar.dto.AlunoDto;
-import com.escola.diario_escolar.dto.AlunoPatchDto;
+import com.escola.diario_escolar.dto.aluno.AlunoDto;
+import com.escola.diario_escolar.dto.aluno.AlunoPatchDto;
+import com.escola.diario_escolar.dto.aluno.AlunoResponseDto;
 import com.escola.diario_escolar.service.AlunoService;
 
 import jakarta.validation.Valid;
@@ -37,10 +38,10 @@ public class AlunoController {
 	}
 
 	@PostMapping
-	public ResponseEntity<AlunoDto> postAluno(
+	public ResponseEntity<AlunoResponseDto> postAluno(
 			@RequestBody @Valid AlunoDto alunoDto) {
 
-		AlunoDto aluno = alunoService.criarAluno(alunoDto);
+		AlunoResponseDto aluno = alunoService.criarAluno(alunoDto);
 
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
@@ -52,35 +53,34 @@ public class AlunoController {
 	}
 
 	@GetMapping("/paginado")
-	public ResponseEntity<Page<AlunoDto>> listarPaginado(
+	public ResponseEntity<Page<AlunoResponseDto>> listarPaginado(
 			@PageableDefault(size = 10, sort = "nome") Pageable pageable) {
 
-		Page<AlunoDto> alunos = alunoService.listarPaginado(pageable);
+		Page<AlunoResponseDto> alunos = alunoService.listarPaginado(pageable);
 
 		return ResponseEntity.ok(alunos);
 	}
 
 	@GetMapping
-	public ResponseEntity<List<AlunoDto>> listarTodos() {
-		List<AlunoDto> listaAlunos = alunoService.listarTodos();
+	public ResponseEntity<List<AlunoResponseDto>> listarTodos() {
+		List<AlunoResponseDto> listaAlunos = alunoService.listarTodos();
 
 		return ResponseEntity.ok(listaAlunos);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<AlunoDto> atualizar(
+	public ResponseEntity<AlunoResponseDto> atualizar(
 			@RequestBody @Valid AlunoDto alunoDto,
 			@PathVariable("id") Long id) {
 
-		AlunoDto alunoAtualizado = alunoService.atualizar(id, alunoDto);
-
+		AlunoResponseDto alunoAtualizado = alunoService.atualizar(id, alunoDto);
 		return ResponseEntity.ok(alunoAtualizado);
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<AlunoDto> buscarPorId(@PathVariable("id") Long id) {
+	public ResponseEntity<AlunoResponseDto> buscarPorId(@PathVariable("id") Long id) {
 
-		AlunoDto aluno = alunoService.buscarPorId(id);
+		AlunoResponseDto aluno = alunoService.buscarPorId(id);
 
 		return ResponseEntity.ok(aluno);
 	}
@@ -92,12 +92,11 @@ public class AlunoController {
     }
 
 	@PatchMapping("/{id}")
-	public ResponseEntity<AlunoDto> atualizarParcial(
+	public ResponseEntity<AlunoResponseDto> atualizarParcial(
 			@PathVariable("id") Long id,
 			@RequestBody AlunoPatchDto patchDto) {
 
-		AlunoDto alunoAtualizado = alunoService.atualizarParcial(id, patchDto);
-
+		AlunoResponseDto alunoAtualizado = alunoService.atualizarParcial(id, patchDto);
 		return ResponseEntity.ok(alunoAtualizado);
 	}
 }

@@ -1,4 +1,4 @@
-package com.escola.diario_escolar.dto;
+package com.escola.diario_escolar.dto.professor;
 
 public class ProfessorPatchDto {
 	

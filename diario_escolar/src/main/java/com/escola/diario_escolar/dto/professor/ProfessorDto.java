@@ -1,6 +1,4 @@
-package com.escola.diario_escolar.dto;
-
-import java.util.UUID;
+package com.escola.diario_escolar.dto.professor;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -9,7 +7,7 @@ import jakarta.validation.constraints.Size;
 public class ProfessorDto {
 	
 	
-	private UUID id; 
+	private Long id; 
 	@NotBlank(message = "O nome é obrigatório")
     @Size(min = 3, max = 75, message = "O nome deve ter entre 3 e 100 caracteres")
 	private String nome;
@@ -21,11 +19,11 @@ public class ProfessorDto {
 	@NotBlank(message = "A formação do professor é obrigatória.")
     private String formacao;
     
-	public UUID getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getFormacao() {

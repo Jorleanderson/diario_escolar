@@ -7,8 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.escola.diario_escolar.dto.TurmaDto;
-import com.escola.diario_escolar.dto.TurmaPatchDto;
+import com.escola.diario_escolar.dto.turma.TurmaDto;
+import com.escola.diario_escolar.dto.turma.TurmaPatchDto;
 import com.escola.diario_escolar.exception.ApiException;
 import com.escola.diario_escolar.mapper.TurmaMapper;
 import com.escola.diario_escolar.model.Turma;

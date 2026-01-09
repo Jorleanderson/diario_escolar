@@ -1,4 +1,4 @@
-package com.escola.diario_escolar.dto;
+package com.escola.diario_escolar.dto.turma;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

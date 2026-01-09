@@ -4,32 +4,64 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.escola.diario_escolar.dto.NotaDto;
-import com.escola.diario_escolar.dto.NotaPatchDto;
+import com.escola.diario_escolar.dto.nota.NotaDto;
+import com.escola.diario_escolar.dto.nota.NotaPatchDto;
+import com.escola.diario_escolar.dto.nota.NotaResponseDto;
+import com.escola.diario_escolar.exception.ApiException;
 import com.escola.diario_escolar.mapper.NotaMapper;
+import com.escola.diario_escolar.model.AlunoEntity;
+import com.escola.diario_escolar.model.Disciplina;
 import com.escola.diario_escolar.model.Nota;
 import com.escola.diario_escolar.repository.NotaRepository;
 
 @Service
 public class NotaService extends BaseService<Nota, Long> {
 
-	private final NotaRepository repository;
+	private final NotaRepository notaRepository;
+	private final AlunoService alunoService;
+	private final DisciplinaService disciplinaService;
 
-	public NotaService(NotaRepository repository) {
-		super(repository, "Nota");
-		this.repository = repository;
+
+	public NotaService(NotaRepository notaRepository,
+			AlunoService alunoService,
+			DisciplinaService disciplinaService)
+	{
+		super(notaRepository, "Nota");
+		this.notaRepository = notaRepository;
+		this.alunoService = alunoService;
+		this.disciplinaService = disciplinaService;
 	}
 
-	public NotaDto criarNota(NotaDto dto) {
-		Nota nota = NotaMapper.toEntity(dto);
+	public NotaResponseDto criarNota(NotaDto dto) {
 
-		return NotaMapper.toDto(repository.save(nota));
-	}
+    AlunoEntity aluno = alunoService.findEntityById(dto.getAlunoId());
+    Disciplina disciplina = disciplinaService.findEntityById(dto.getDisciplinaId());
+
+    if (notaRepository.existsByAlunoIdAndDisciplinaIdAndTrimestre(
+            aluno.getId(),
+            disciplina.getId(),
+            dto.getTrimestre())) {
+
+        throw new ApiException(
+            "Já existe nota lançada para este aluno nesta disciplina e trimestre",
+            HttpStatus.CONFLICT
+        );
+    }
+
+    Nota nota =
+        NotaMapper.toEntity(dto, aluno, disciplina);
+
+    return NotaMapper.toResponseDto(
+        notaRepository.save(nota)
+    );
+}
+
 
 	public List<NotaDto> listarTodos() {
-		return repository.findAll()
+		return notaRepository.findAll()
 				.stream()
 				.map(NotaMapper::toDto)
 				.toList();
@@ -45,12 +77,12 @@ public class NotaService extends BaseService<Nota, Long> {
 		nota.setTrimestre(atualizado.getTrimestre());
 		nota.setValor(atualizado.getValor());
 
-		return NotaMapper.toDto(repository.save(nota));
+		return NotaMapper.toDto(notaRepository.save(nota));
 	}
 
 	public void deletar(Long id) {
 		Nota nota = findEntityById(id);
-		repository.delete(nota);
+		notaRepository.delete(nota);
 	}
 
 	public NotaDto atualizarParcial(Long id, NotaPatchDto patchDto) {
@@ -65,13 +97,13 @@ public class NotaService extends BaseService<Nota, Long> {
 			nota.setValor(patchDto.getValor());
 		}
 
-		Nota atualizado = repository.save(nota);
+		Nota atualizado = notaRepository.save(nota);
 
 		return NotaMapper.toDto(atualizado);
 	}
 
 	public Page<NotaDto> listarPaginado(Pageable pageable) {
-		return repository.findAll(pageable)
+		return notaRepository.findAll(pageable)
 				.map(NotaMapper::toDto);
 	}
 

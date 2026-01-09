@@ -1,61 +1,54 @@
-package com.escola.diario_escolar.dto;
+package com.escola.diario_escolar.dto.aluno;
 
 import java.time.LocalDate;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import com.escola.diario_escolar.dto.turma.TurmaResumoDto;
 
-public class AlunoDto {
+public class AlunoResponseDto {
 
-    
     private Long id;
-    @NotBlank(message = "O nome é obrigatório")
     private String nome;
-    @NotBlank(message = "A matrícula é obrigatória")
     private String matricula;
-    @NotNull(message = "A data de nascimento é obrigatória")
     private LocalDate dataNascimento;
-    @NotBlank(message = "O e-mail é obrigatório")
-    @Email(message = "Informe um e-mail válido")
     private String email;
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    private TurmaResumoDto turma;
     public Long getId() {
         return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
     public String getNome() {
         return nome;
     }
-
     public void setNome(String nome) {
         this.nome = nome;
     }
-
     public String getMatricula() {
         return matricula;
     }
-
     public void setMatricula(String matricula) {
         this.matricula = matricula;
     }
-
     public LocalDate getDataNascimento() {
         return dataNascimento;
     }
-
     public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
-
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
+    public TurmaResumoDto getTurma() {
+        return turma;
+    }
+    public void setTurma(TurmaResumoDto turma) {
+        this.turma = turma;
+    }
+
+  
 }
+

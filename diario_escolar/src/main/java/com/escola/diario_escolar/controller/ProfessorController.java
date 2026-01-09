@@ -2,7 +2,6 @@ package com.escola.diario_escolar.controller;
 
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.escola.diario_escolar.dto.ProfessorDto;
-import com.escola.diario_escolar.dto.ProfessorPatchDto;
+import com.escola.diario_escolar.dto.professor.ProfessorDto;
+import com.escola.diario_escolar.dto.professor.ProfessorPatchDto;
 import com.escola.diario_escolar.service.ProfessorService;
 
 import jakarta.validation.Valid;
@@ -70,7 +69,7 @@ public class ProfessorController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ProfessorDto> buscarPorId(
-            @PathVariable("id") UUID id) {
+            @PathVariable("id") Long id) {
 
         ProfessorDto professor = professorService.buscarPorId(id);
 
@@ -79,7 +78,7 @@ public class ProfessorController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ProfessorDto> atualizar(
-            @PathVariable("id") UUID id,
+            @PathVariable("id") Long id,
             @RequestBody @Valid ProfessorDto professorDto) {
 
         ProfessorDto professor = professorService.atualizar(id, professorDto);
@@ -88,7 +87,7 @@ public class ProfessorController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable("id") UUID id) {
+    public ResponseEntity<Void> deletar(@PathVariable("id") Long id) {
         professorService.deletar(id);
 
         return ResponseEntity.noContent().build();
@@ -96,7 +95,7 @@ public class ProfessorController {
 
     @PatchMapping("/{id}")
     public ResponseEntity<ProfessorDto> atualizarParcial(
-            @PathVariable("id") UUID id,
+            @PathVariable("id") Long id,
             @RequestBody ProfessorPatchDto patchDto) {
 
         ProfessorDto ProfessorAtualizado = professorService.atualizarParcial(id, patchDto);
