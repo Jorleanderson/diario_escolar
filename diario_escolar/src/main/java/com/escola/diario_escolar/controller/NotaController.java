@@ -16,12 +16,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.escola.diario_escolar.dto.disciplina.BoletimDisciplinaDto;
 import com.escola.diario_escolar.dto.nota.NotaDto;
 import com.escola.diario_escolar.dto.nota.NotaPatchDto;
 import com.escola.diario_escolar.dto.nota.NotaResponseDto;
+import com.escola.diario_escolar.dto.nota.NotaResumoDto;
 import com.escola.diario_escolar.service.NotaService;
 
 import jakarta.validation.Valid;
@@ -62,8 +65,8 @@ public class NotaController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<NotaDto>> listarTodos() {
-		List<NotaDto> notas = notaService.listarTodos();
+	public ResponseEntity<List<NotaResumoDto>> listarTodos() {
+		List<NotaResumoDto> notas = notaService.listarTodos();
 
 		return ResponseEntity.ok(notas);
 	}
@@ -102,6 +105,15 @@ public class NotaController {
 		NotaDto notaAtualizada = notaService.atualizarParcial(id, patchDto);
 
 		return ResponseEntity.ok(notaAtualizada);
+	}
+
+	@GetMapping("/boletim")
+	public ResponseEntity<BoletimDisciplinaDto> gerarBoletim(
+			@RequestParam Long alunoId,
+			@RequestParam Long disciplinaId) {
+
+		return ResponseEntity.ok(
+				notaService.gerarBoletim(alunoId, disciplinaId));
 	}
 
 }

@@ -2,6 +2,7 @@ package com.escola.diario_escolar.mapper;
 
 import com.escola.diario_escolar.dto.aluno.AlunoDto;
 import com.escola.diario_escolar.dto.aluno.AlunoResponseDto;
+import com.escola.diario_escolar.dto.aluno.AlunoResumoDto;
 import com.escola.diario_escolar.dto.turma.TurmaResumoDto;
 import com.escola.diario_escolar.model.AlunoEntity;
 import com.escola.diario_escolar.model.Turma;
@@ -48,4 +49,13 @@ public class AlunoMapper {
 
         return dto;
     }
+
+    public static AlunoResumoDto toResumo(AlunoEntity aluno) {
+        AlunoResumoDto dto = new AlunoResumoDto();
+        dto.setId(aluno.getId());
+        dto.setNome(aluno.getNome());
+        dto.setMatricula(aluno.getMatricula());
+        return dto;
+    }
+
 }

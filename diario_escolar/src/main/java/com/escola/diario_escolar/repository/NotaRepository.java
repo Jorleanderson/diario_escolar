@@ -13,4 +13,10 @@ public interface NotaRepository extends BaseRepository<Nota, Long> {
     );
 
     List<Nota> findByAlunoId(Long alunoId);
+
+    List<Nota> findByAlunoIdAndDisciplinaId(
+        Long alunoId,
+        Long disciplinaId
+    );
+
 }

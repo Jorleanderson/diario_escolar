@@ -2,6 +2,7 @@ package com.escola.diario_escolar.mapper;
 
 import com.escola.diario_escolar.dto.disciplina.DisciplinaDto;
 import com.escola.diario_escolar.dto.disciplina.DisciplinaResponseDto;
+import com.escola.diario_escolar.dto.disciplina.DisciplinaResumoDto;
 import com.escola.diario_escolar.dto.professor.ProfessorResumoDto;
 import com.escola.diario_escolar.dto.turma.TurmaResumoDto;
 import com.escola.diario_escolar.model.Disciplina;
@@ -54,6 +55,10 @@ public class DisciplinaMapper {
     return dto;
 }
 
-
-
+    public static DisciplinaResumoDto toResumo(Disciplina disciplina) {
+        DisciplinaResumoDto dto = new DisciplinaResumoDto();
+        dto.setId(disciplina.getId());
+        dto.setNome(disciplina.getNome());
+        return dto;
+    }
 }
