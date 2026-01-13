@@ -1,21 +1,15 @@
 package com.escola.diario_escolar.service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.escola.diario_escolar.dto.disciplina.BoletimDisciplinaDto;
 import com.escola.diario_escolar.dto.nota.NotaDto;
 import com.escola.diario_escolar.dto.nota.NotaPatchDto;
 import com.escola.diario_escolar.dto.nota.NotaResponseDto;
-import com.escola.diario_escolar.enums.SituacaoAluno;
 import com.escola.diario_escolar.exception.ApiException;
-import com.escola.diario_escolar.mapper.DisciplinaMapper;
 import com.escola.diario_escolar.mapper.NotaMapper;
 import com.escola.diario_escolar.model.AlunoEntity;
 import com.escola.diario_escolar.model.Disciplina;
