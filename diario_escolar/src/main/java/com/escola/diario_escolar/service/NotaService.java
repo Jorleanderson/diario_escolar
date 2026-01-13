@@ -13,10 +13,8 @@ import com.escola.diario_escolar.dto.disciplina.BoletimDisciplinaDto;
 import com.escola.diario_escolar.dto.nota.NotaDto;
 import com.escola.diario_escolar.dto.nota.NotaPatchDto;
 import com.escola.diario_escolar.dto.nota.NotaResponseDto;
-import com.escola.diario_escolar.dto.nota.NotaResumoDto;
 import com.escola.diario_escolar.enums.SituacaoAluno;
 import com.escola.diario_escolar.exception.ApiException;
-import com.escola.diario_escolar.mapper.AlunoMapper;
 import com.escola.diario_escolar.mapper.DisciplinaMapper;
 import com.escola.diario_escolar.mapper.NotaMapper;
 import com.escola.diario_escolar.model.AlunoEntity;
@@ -61,10 +59,10 @@ public class NotaService extends BaseService<Nota, Long> {
 				notaRepository.save(nota));
 	}
 
-	public List<NotaResumoDto> listarTodos() {
+	public List<NotaDto> listarTodos() {
 		return notaRepository.findAll()
 				.stream()
-				.map(NotaMapper::toResumo)
+				.map(NotaMapper::toDto)
 				.toList();
 	}
 
@@ -101,67 +99,6 @@ public class NotaService extends BaseService<Nota, Long> {
 		Nota atualizado = notaRepository.save(nota);
 
 		return NotaMapper.toDto(atualizado);
-	}
-
-	public Page<NotaDto> listarPaginado(Pageable pageable) {
-		return notaRepository.findAll(pageable)
-				.map(NotaMapper::toDto);
-	}
-
-	private BigDecimal calcularMedia(List<Nota> notas) {
-
-		BigDecimal soma = notas.stream()
-				.map(Nota::getValor)
-				.reduce(BigDecimal.ZERO, BigDecimal::add);
-
-		return soma.divide(
-				BigDecimal.valueOf(notas.size()),
-				2,
-				RoundingMode.HALF_UP);
-	}
-
-	private String definirSituacao(
-			List<Nota> notas,
-			BigDecimal media) {
-
-		if (notas.size() < 4) {
-			return SituacaoAluno.EM_ANDAMENTO.name();
-		}
-
-		if (media.compareTo(BigDecimal.valueOf(7.0)) >= 0) {
-			return SituacaoAluno.APROVADO.name();
-		}
-
-		return SituacaoAluno.REPROVADO.name();
-	}
-
-	public BoletimDisciplinaDto gerarBoletim(Long alunoId, Long disciplinaId) {
-
-		AlunoEntity aluno = alunoService.findEntityById(alunoId);
-		Disciplina disciplina = disciplinaService.findEntityById(disciplinaId);
-
-		List<Nota> notas = notaRepository.findByAlunoIdAndDisciplinaId(alunoId, disciplinaId);
-
-		if (notas.isEmpty()) {
-			throw new ApiException(
-					"Nenhuma nota encontrada para este aluno nesta disciplina",
-					HttpStatus.NOT_FOUND);
-		}
-
-		BigDecimal media = calcularMedia(notas);
-		String situacao = definirSituacao(notas, media);
-
-		BoletimDisciplinaDto boletim = new BoletimDisciplinaDto();
-		boletim.setAluno(AlunoMapper.toResumo(aluno));
-		boletim.setDisciplina(DisciplinaMapper.toResumo(disciplina));
-		boletim.setNotas(
-				notas.stream()
-						.map(NotaMapper::toResumo)
-						.toList());
-		boletim.setMedia(media);
-		boletim.setSituacao(situacao);
-
-		return boletim;
 	}
 
 }

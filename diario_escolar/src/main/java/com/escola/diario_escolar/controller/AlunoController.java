@@ -24,9 +24,13 @@ import com.escola.diario_escolar.dto.aluno.AlunoPatchDto;
 import com.escola.diario_escolar.dto.aluno.AlunoResponseDto;
 import com.escola.diario_escolar.service.AlunoService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-
+@Tag(name = "Alunos", description = "Gerenciamento de alunos")
 @RestController
 @RequestMapping("/api/alunos")
 public class AlunoController {
@@ -77,6 +81,14 @@ public class AlunoController {
 		return ResponseEntity.ok(alunoAtualizado);
 	}
 
+	@Operation(
+		summary = "Buscar aluno por ID",
+		description = "Retorna os dados completos de um aluno pelo seu identificador"
+	)
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "Aluno encontrado"),
+		@ApiResponse(responseCode = "404", description = "Aluno não encontrado")
+	})
 	@GetMapping("/{id}")
 	public ResponseEntity<AlunoResponseDto> buscarPorId(@PathVariable("id") Long id) {
 

@@ -3,9 +3,6 @@ package com.escola.diario_escolar.controller;
 import java.net.URI;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,15 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.escola.diario_escolar.dto.disciplina.BoletimDisciplinaDto;
 import com.escola.diario_escolar.dto.nota.NotaDto;
 import com.escola.diario_escolar.dto.nota.NotaPatchDto;
 import com.escola.diario_escolar.dto.nota.NotaResponseDto;
-import com.escola.diario_escolar.dto.nota.NotaResumoDto;
 import com.escola.diario_escolar.service.NotaService;
 
 import jakarta.validation.Valid;
@@ -54,19 +48,10 @@ public class NotaController {
 		return ResponseEntity.created(location).body(notaCriada);
 	}
 
-	@GetMapping("/paginado")
-	public ResponseEntity<Page<NotaDto>> listarPaginado(
-			@PageableDefault(size = 10, sort = "id") Pageable pageable) {
-
-		Page<NotaDto> pagina = notaService.listarPaginado(pageable);
-
-		return ResponseEntity.ok(pagina);
-
-	}
 
 	@GetMapping
-	public ResponseEntity<List<NotaResumoDto>> listarTodos() {
-		List<NotaResumoDto> notas = notaService.listarTodos();
+	public ResponseEntity<List<NotaDto>> listarTodos() {
+		List<NotaDto> notas = notaService.listarTodos();
 
 		return ResponseEntity.ok(notas);
 	}
@@ -107,13 +92,5 @@ public class NotaController {
 		return ResponseEntity.ok(notaAtualizada);
 	}
 
-	@GetMapping("/boletim")
-	public ResponseEntity<BoletimDisciplinaDto> gerarBoletim(
-			@RequestParam Long alunoId,
-			@RequestParam Long disciplinaId) {
-
-		return ResponseEntity.ok(
-				notaService.gerarBoletim(alunoId, disciplinaId));
-	}
 
 }

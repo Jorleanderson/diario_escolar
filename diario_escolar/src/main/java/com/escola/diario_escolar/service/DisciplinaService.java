@@ -34,17 +34,15 @@ public class DisciplinaService extends BaseService<Disciplina, Long> {
 
     public DisciplinaResponseDto criarDisciplina(DisciplinaDto dto) {
 
-          boolean jaExiste = repository.existsByNomeAndTurmaId(
-            dto.getNome(),
-            dto.getTurmaId()
-    );
+        boolean jaExiste = repository.existsByNomeAndTurmaId(
+                dto.getNome(),
+                dto.getTurmaId());
 
-    if (jaExiste) {
-        throw new ApiException(
-            "Já existe uma disciplina com esse nome nesta turma.",
-            HttpStatus.CONFLICT
-        );
-    }
+        if (jaExiste) {
+            throw new ApiException(
+                    "Já existe uma disciplina com esse nome nesta turma.",
+                    HttpStatus.CONFLICT);
+        }
 
         Turma turma = turmaService.findEntityById(dto.getTurmaId());
         Professor professor = professorService.findEntityById(dto.getProfessorId());
@@ -64,6 +62,10 @@ public class DisciplinaService extends BaseService<Disciplina, Long> {
 
     public DisciplinaResponseDto buscarPorId(Long id) {
         return DisciplinaMapper.toResponseDto(findEntityById(id));
+    }
+
+    public List<Disciplina> listarPorTurma(Long turmaId) {
+        return repository.findByTurmaId(turmaId);
     }
 
     public DisciplinaResponseDto atualizar(Long id, DisciplinaDto atualizado) {

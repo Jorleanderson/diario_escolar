@@ -1,6 +1,7 @@
 package com.escola.diario_escolar.mapper;
 
 import com.escola.diario_escolar.dto.turma.TurmaDto;
+import com.escola.diario_escolar.dto.turma.TurmaResumoDto;
 import com.escola.diario_escolar.model.Turma;
 
 public class TurmaMapper {
@@ -26,6 +27,16 @@ public class TurmaMapper {
         dto.setId(turma.getId());
         dto.setNome(turma.getNome());
         dto.setTurno(turma.getTurno());
+
+        return dto;
+    }
+
+    public static TurmaResumoDto toResumo(Turma turma) {
+
+        TurmaResumoDto dto = new TurmaResumoDto();
+        dto.setId(turma.getId());
+        dto.setCodigo(turma.getCodigo());
+        dto.setNome(turma.getNome());
 
         return dto;
     }

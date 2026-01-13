@@ -4,4 +4,5 @@ public enum SituacaoAluno {
     EM_ANDAMENTO,
     APROVADO,
     REPROVADO
+    ,SEM_NOTAS;
 }

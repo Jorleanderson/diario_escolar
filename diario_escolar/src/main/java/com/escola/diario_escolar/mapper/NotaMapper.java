@@ -16,6 +16,8 @@ public class NotaMapper {
         dto.setId(nota.getId());
         dto.setTrimestre(nota.getTrimestre());
         dto.setValor(nota.getValor());
+        dto.setAlunoId(nota.getAluno().getId());
+        dto.setDisciplinaId(nota.getDisciplina().getId());
         return dto;
     }
 
