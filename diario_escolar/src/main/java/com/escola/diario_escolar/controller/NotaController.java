@@ -21,76 +21,136 @@ import com.escola.diario_escolar.dto.nota.NotaPatchDto;
 import com.escola.diario_escolar.dto.nota.NotaResponseDto;
 import com.escola.diario_escolar.service.NotaService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import jakarta.validation.Valid;
 
+@Tag(
+    name = "Notas",
+    description = "Gerenciamento de notas dos alunos"
+)
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/notas")
 public class NotaController {
 
-	private final NotaService notaService;
+    private final NotaService notaService;
 
-	public NotaController(NotaService service) {
-		this.notaService = service;
-	}
+    public NotaController(NotaService service) {
+        this.notaService = service;
+    }
 
-	@PostMapping
-	public ResponseEntity<NotaResponseDto> postNota(
-			@RequestBody @Valid NotaDto nota) {
-		NotaResponseDto notaCriada = notaService.criarNota(nota);
+    @Operation(
+        summary = "Cadastrar nova nota",
+        description = "Cria uma nova nota vinculada a um aluno e a uma disciplina."
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Nota criada com sucesso"),
+        @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+        @ApiResponse(responseCode = "404", description = "Aluno ou disciplina não encontrados")
+    })
+    @PostMapping
+    public ResponseEntity<NotaResponseDto> postNota(
+            @RequestBody @Valid NotaDto nota) {
 
-		URI location = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path("/{id}")
-				.buildAndExpand(notaCriada.getId())
-				.toUri();
+        NotaResponseDto notaCriada = notaService.criarNota(nota);
 
-		return ResponseEntity.created(location).body(notaCriada);
-	}
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(notaCriada.getId())
+                .toUri();
 
+        return ResponseEntity.created(location).body(notaCriada);
+    }
 
-	@GetMapping
-	public ResponseEntity<List<NotaDto>> listarTodos() {
-		List<NotaDto> notas = notaService.listarTodos();
+    @Operation(
+        summary = "Listar todas as notas",
+        description = "Retorna todas as notas cadastradas no sistema."
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
+    })
+    @GetMapping
+    public ResponseEntity<List<NotaDto>> listarTodos() {
 
-		return ResponseEntity.ok(notas);
-	}
+        List<NotaDto> notas = notaService.listarTodos();
+        return ResponseEntity.ok(notas);
+    }
 
-	@GetMapping("/{id}")
-	public ResponseEntity<NotaDto> buscarPorId(
-			@PathVariable("id") Long id) {
+    @Operation(
+        summary = "Buscar nota por ID",
+        description = "Retorna os dados de uma nota pelo seu identificador."
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Nota encontrada"),
+        @ApiResponse(responseCode = "404", description = "Nota não encontrada")
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<NotaDto> buscarPorId(
+            @Parameter(description = "ID da nota", example = "1")
+            @PathVariable("id") Long id) {
 
-		NotaDto nota = notaService.buscarPorId(id);
+        NotaDto nota = notaService.buscarPorId(id);
+        return ResponseEntity.ok(nota);
+    }
 
-		return ResponseEntity.ok(nota);
-	}
+    @Operation(
+        summary = "Atualizar nota",
+        description = "Atualiza todos os dados de uma nota existente."
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Nota atualizada com sucesso"),
+        @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+        @ApiResponse(responseCode = "404", description = "Nota não encontrada")
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<NotaDto> atualizar(
+            @Parameter(description = "ID da nota")
+            @PathVariable("id") Long id,
+            @RequestBody @Valid NotaDto notaDto) {
 
-	@PutMapping("/{id}")
-	public ResponseEntity<NotaDto> atualizar(
-			@PathVariable("id") Long id,
-			@RequestBody @Valid NotaDto notaDto) {
+        NotaDto nota = notaService.atualizar(id, notaDto);
+        return ResponseEntity.ok(nota);
+    }
 
-		NotaDto nota = notaService.atualizar(id, notaDto);
+    @Operation(
+        summary = "Remover nota",
+        description = "Remove uma nota pelo seu ID."
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "204", description = "Nota removida com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Nota não encontrada")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(
+            @Parameter(description = "ID da nota")
+            @PathVariable("id") Long id) {
 
-		return ResponseEntity.ok(nota);
-	}
+        notaService.deletar(id);
+        return ResponseEntity.noContent().build();
+    }
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deletar(@PathVariable("id") Long id) {
-		notaService.deletar(id);
+    @Operation(
+        summary = "Atualizar parcialmente uma nota",
+        description = "Atualiza apenas os campos informados da nota."
+    )
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Nota atualizada com sucesso"),
+        @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+        @ApiResponse(responseCode = "404", description = "Nota não encontrada")
+    })
+    @PatchMapping("/{id}")
+    public ResponseEntity<NotaDto> atualizarParcial(
+            @Parameter(description = "ID da nota")
+            @PathVariable("id") Long id,
+            @RequestBody NotaPatchDto patchDto) {
 
-		return ResponseEntity.noContent().build();
-	}
-
-	@PatchMapping("/{id}")
-	public ResponseEntity<NotaDto> atualizarParcial(
-			@PathVariable("id") Long id,
-			@RequestBody NotaPatchDto patchDto) {
-
-		NotaDto notaAtualizada = notaService.atualizarParcial(id, patchDto);
-
-		return ResponseEntity.ok(notaAtualizada);
-	}
-
-
+        NotaDto notaAtualizada = notaService.atualizarParcial(id, patchDto);
+        return ResponseEntity.ok(notaAtualizada);
+    }
 }
